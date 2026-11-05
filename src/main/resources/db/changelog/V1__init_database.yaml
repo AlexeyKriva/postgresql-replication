@@ -1,0 +1,73 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0
+      author: postgres
+      changes:
+        - createTable:
+            tableName: unit_of_measurements
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: value
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: unit_of_measurement_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    referencedTableName: unit_of_measurements
+                    referencedColumnNames: id
+                    foreignKeyName: fk_unit_of_measurements_id
+        - createTable:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  generationType: ALWAYS
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pack_size_id
+                  type: int
+                  constraints:
+                    nullable: true
+                    referencedTableName: product_base_pack_sizes
+                    referencedColumnNames: id
+                    foreignKeyName: fk_product_base_pack_sizes_id
+              - column:
+                  name: price
+                  type: NUMERIC
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sale_precent
+                  type: int
+                  constraints:
+                    nullable: true
+                    checkConstraint: "sale_precent > 0 AND sale_precent < 100"

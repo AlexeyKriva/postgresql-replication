@@ -1,0 +1,185 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: postgres
+      changes:
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "1"
+              - column:
+                  name: "value"
+                  valueNumeric: "177"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "1"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "2"
+              - column:
+                  name: "value"
+                  valueNumeric: "333"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "2"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "3"
+              - column:
+                  name: "value"
+                  valueNumeric: "500"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "2"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "4"
+              - column:
+                  name: "value"
+                  valueNumeric: "750"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "2"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "5"
+              - column:
+                  name: "value"
+                  valueNumeric: "1"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "3"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "6"
+              - column:
+                  name: "value"
+                  valueNumeric: "3"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "3"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "7"
+              - column:
+                  name: "value"
+                  valueNumeric: "5"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "3"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "8"
+              - column:
+                  name: "value"
+                  valueNumeric: "7"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "3"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "9"
+              - column:
+                  name: "value"
+                  valueNumeric: "10"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "3"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "10"
+              - column:
+                  name: "value"
+                  valueNumeric: "7"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "3"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "11"
+              - column:
+                  name: "value"
+                  valueNumeric: "400"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "4"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "12"
+              - column:
+                  name: "value"
+                  valueNumeric: "500"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "4"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "13"
+              - column:
+                  name: "value"
+                  valueNumeric: "750"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "4"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "14"
+              - column:
+                  name: "value"
+                  valueNumeric: "1"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "5"
+        - insert:
+            tableName: product_base_pack_sizes
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "15"
+              - column:
+                  name: "value"
+                  valueNumeric: "3"
+              - column:
+                  name: "unit_of_measurement_id"
+                  valueNumeric: "5"

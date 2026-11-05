@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: V1__init_database.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: V2__insert_unit_of_measurements.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: V3__insert_product_base_pack_sizes.yaml
+      relativeToChangelogFile: true

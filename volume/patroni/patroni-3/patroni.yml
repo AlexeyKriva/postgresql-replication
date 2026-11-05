@@ -1,0 +1,88 @@
+thread_pool_size: 10
+
+name: patroni-3
+namespace: /service
+scope: postgresql-cluster
+
+log:
+  type: plain
+  level: INFO
+
+bootstrap:
+  dcs:
+    loop_wait: 7
+    ttl: 35
+    retry_timeout: 5
+
+    synchronous_mode: quorum
+    synchronous_mode_strict: true
+    synchronous_node_count: 1
+
+    failsafe_mode: true
+
+    postgresql:
+      use_pg_rewind: true
+      use_slots: true
+      parameters:
+        wal_level: "replica"
+        full_page_writes: "on"
+        hot_standby: "on"
+      pg_hba:
+        - local all all trust
+        - host all all 127.0.0.1/32 trust
+        - host all all 172.20.0.0/16 trust
+        - host all all ::1/128 trust
+        - host replication replicator 172.20.0.0/16 scram-sha-256
+        - host replication replicator 127.0.0.1/32 scram-sha-256
+        - host replication replicator ::1/128 scram-sha-256
+        - host postgres rewinder 172.20.0.0/16 scram-sha-256
+
+  initdb:
+    - data-checksums
+
+  post_init: /etc/scripts/postgresql/init-script.sh
+
+zookeeper:
+  hosts: ['zookeeper-1:2181','zookeeper-2:2181','zookeeper-3:2181']
+
+postgresql:
+  authentication:
+
+    superuser:
+      username: postgres
+      password: password_for_superuser
+
+    replication:
+      username: replicator
+      password: password_for_replication
+
+    rewind:
+      username: rewinder
+      password: password_for_rewind
+
+  listen: 0.0.0.0:5432
+  connect_address: patroni-3:5432
+
+  data_dir: /var/lib/postgresql/18/data
+
+  use_pg_rewind: true
+
+  parameters:
+    wal_level: "replica"
+    max_wal_senders: 3
+    full_page_writes: "on"
+    hot_standby: "on"
+    wal_log_hints: "on"
+
+    log_statement: "mode"
+    log_connections: "on"
+    log_disconnections: "on"
+    log_line_prefix: "%m [%p] %u@%d client=%h "
+
+  create_replica_methods:
+    - basebackup
+
+restapi:
+  thread_pool_size: 10
+  listen: 0.0.0.0:8008
+  connect_address: patroni-3:8008

@@ -1,0 +1,277 @@
+services:
+  zookeeper-1:
+    image: zookeeper
+    container_name: zookeeper-1
+
+    ports:
+      - "2181:2181"
+
+    restart: on-failure:5
+
+    networks:
+      - postgres-cluster
+
+    environment:
+      - ZOO_MY_ID=1
+      - ZOO_SERVERS=server.1=zookeeper-1:2888:3888;2181 server.2=zookeeper-2:2888:3888;2181 server.3=zookeeper-3:2888:3888;2181
+
+    healthcheck:
+      test: nc -z localhost 2181 || exit -1
+      interval: 1s
+      timeout: 2s
+      retries: 3
+      start_period: 5s
+
+    volumes:
+      - zookeeper-1-data:/data
+      - zookeeper-1-datalog:/datalog
+
+
+  zookeeper-2:
+    image: zookeeper
+    container_name: zookeeper-2
+
+    ports:
+      - "2182:2181"
+
+    restart: on-failure:5
+
+    networks:
+      - postgres-cluster
+
+    environment:
+      - ZOO_MY_ID=2
+      - ZOO_SERVERS=server.1=zookeeper-1:2888:3888;2181 server.2=zookeeper-2:2888:3888;2181 server.3=zookeeper-3:2888:3888;2181
+
+    healthcheck:
+      test: nc -z localhost 2181 || exit -1
+      interval: 1s
+      timeout: 2s
+      retries: 3
+      start_period: 5s
+
+    volumes:
+      - zookeeper-2-data:/data
+      - zookeeper-2-datalog:/datalog
+
+
+  zookeeper-3:
+    image: zookeeper
+    container_name: zookeeper-3
+
+    ports:
+      - "2183:2181"
+
+    restart: on-failure:5
+
+    networks:
+      - postgres-cluster
+
+    environment:
+      - ZOO_MY_ID=3
+      - ZOO_SERVERS=server.1=zookeeper-1:2888:3888;2181 server.2=zookeeper-2:2888:3888;2181 server.3=zookeeper-3:2888:3888;2181
+
+    healthcheck:
+      test: nc -z localhost 2181 || exit -1
+      interval: 1s
+      timeout: 2s
+      retries: 3
+      start_period: 5s
+
+    volumes:
+      - zookeeper-3-data:/data
+      - zookeeper-3-datalog:/datalog
+
+
+  zoonavigator:
+    image: elkozmon/zoonavigator:latest
+    container_name: zoonavigator
+
+    ports:
+      - "9000:9000"
+
+    restart: on-failure:5
+
+    networks:
+      - postgres-cluster
+
+    environment:
+      HTTP_PORT: 9000
+
+    depends_on:
+      zookeeper-1:
+        condition: service_healthy
+      zookeeper-2:
+        condition: service_healthy
+      zookeeper-3:
+        condition: service_healthy
+
+
+  patroni-1:
+    image: patroni-with-kazoo
+    container_name: patroni-1
+
+    ports:
+      - "8008:8008"
+
+    restart: on-failure:5
+
+    networks:
+      - postgres-cluster
+    
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python3",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8008/health')"
+        ]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+      start_period: 120s
+
+    volumes:
+      - ./volume/patroni/patroni-1/patroni.yml:/etc/patroni/patroni.yml
+      - ./volume/script/init-script.sh:/etc/scripts/postgresql/init-script.sh
+      - postgresql_volume_1:/var/lib/postgresql/18
+
+    command:
+      - /etc/patroni/patroni.yml
+
+    depends_on:
+      zookeeper-1:
+        condition: service_healthy
+      zookeeper-2:
+        condition: service_healthy
+      zookeeper-3:
+        condition: service_healthy
+
+
+  patroni-2:
+    image: patroni-with-kazoo
+    container_name: patroni-2
+
+    ports:
+      - "8009:8008"
+
+    restart: on-failure:5
+
+    networks:
+      - postgres-cluster
+    
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python3",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8008/health')"
+        ]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+      start_period: 120s
+
+    volumes:
+      - ./volume/patroni/patroni-2/patroni.yml:/etc/patroni/patroni.yml
+      - ./volume/script/init-script.sh:/etc/scripts/postgresql/init-script.sh
+      - postgresql_volume_2:/var/lib/postgresql/18
+
+    command:
+      - /etc/patroni/patroni.yml
+
+    depends_on:
+      zookeeper-1:
+        condition: service_healthy
+      zookeeper-2:
+        condition: service_healthy
+      zookeeper-3:
+        condition: service_healthy
+
+
+  patroni-3:
+    image: patroni-with-kazoo
+    container_name: patroni-3
+
+    ports:
+      - "8010:8008"
+
+    restart: on-failure:5
+
+    networks:
+      - postgres-cluster
+    
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python3",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8008/health')"
+        ]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+      start_period: 120s
+
+    volumes:
+      - ./volume/patroni/patroni-3/patroni.yml:/etc/patroni/patroni.yml
+      - ./volume/script/init-script.sh:/etc/scripts/postgresql/init-script.sh
+      - postgresql_volume_3:/var/lib/postgresql/18
+
+    command:
+      - /etc/patroni/patroni.yml
+
+    depends_on:
+      zookeeper-1:
+        condition: service_healthy
+      zookeeper-2:
+        condition: service_healthy
+      zookeeper-3:
+        condition: service_healthy
+
+
+  ha-proxy:
+    image: haproxy
+    container_name: ha-proxy
+
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+    restart: on-failure:5
+
+    networks:
+      - postgres-cluster
+
+    volumes:
+      - ./volume/ha-proxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+
+    depends_on:
+      patroni-1:
+        condition: service_healthy
+      patroni-2:
+        condition: service_healthy
+      patroni-3:
+        condition: service_healthy
+
+
+
+volumes:
+  postgresql_volume_1:
+  postgresql_volume_2:
+  postgresql_volume_3:
+  zookeeper-1-data:
+  zookeeper-1-datalog:
+  zookeeper-2-data:
+  zookeeper-2-datalog:
+  zookeeper-3-data:
+  zookeeper-3-datalog:
+
+
+
+networks:
+  postgres-cluster:
+    driver: bridge

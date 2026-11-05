@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: postgres
+      changes:
+        - insert:
+            tableName: unit_of_measurements
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "1"
+              - column:
+                  name: "name"
+                  value: "Milligram"
+        - insert:
+            tableName: unit_of_measurements
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "2"
+              - column:
+                  name: "name"
+                  value: "Gram"
+        - insert:
+            tableName: unit_of_measurements
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "3"
+              - column:
+                  name: "name"
+                  value: "Kilogram"
+        - insert:
+            tableName: unit_of_measurements
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "4"
+              - column:
+                  name: "name"
+                  value: "Milliliter"
+        - insert:
+            tableName: unit_of_measurements
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "5"
+              - column:
+                  name: "name"
+                  value: "Liter"

@@ -1,0 +1,76 @@
+spring:
+  application:
+    name: postgresql-replication
+
+  config:
+    import: optional:file:.env[.properties]
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+
+  datasource:
+    database_name: ${DATABASE_NAME}
+    host: localhost
+    port: 5000
+    url: jdbc:postgresql://${spring.datasource.host}:${spring.datasource.port}/${spring.datasource.database_name}
+    driver-class-name: org.postgresql.Driver
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    hikari:
+      pool-name: WriteHikariPool
+
+      maximum-pool-size: 10
+      minimum-idle: 5
+
+      connection-timeout: 10000
+
+      idle-timeout: 30000
+      max-lifetime: 180000
+
+      keepalive-time: 60000
+
+      leak-detection-threshold: 2000
+
+read-replica:
+  datasource:
+    database_name: ${DATABASE_NAME}
+    host: localhost
+    port: 5001
+    url: jdbc:postgresql://${read-replica.datasource.host}:${read-replica.datasource.port}/${read-replica.datasource.database_name}
+    driver-class-name: org.postgresql.Driver
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    hikari:
+      pool-name: ReadHikariPool
+
+      maximum-pool-size: 10
+      minimum-idle: 5
+
+      connection-timeout: 10000
+
+      idle-timeout: 30000
+      max-lifetime: 180000
+
+      keepalive-time: 60000
+
+      leak-detection-threshold: 2000
+
+server:
+  port: 8090
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics,bean"
+
+logging:
+  level:
+#    org.springframework.transaction: DEBUG
+#    org.springframework.orm.jpa: DEBUG
+#    org.hibernate.engine.jdbc.connections: DEBUG
+
+  file:
+    path: ./logs
